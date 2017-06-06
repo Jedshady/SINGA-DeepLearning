@@ -186,6 +186,8 @@ class Optimizer(object):
         assert self.lr is not None, 'Must set the learning rate, i.e. "lr"'
         return self.apply_with_lr(epoch, self.lr, grad, value, name, step)
 
+####################################################################
+# TODO: Following five classes has been modified by Jedshady
 class SGD_ORI(Optimizer):
     '''The vallina Stochasitc Gradient Descent algorithm without momentum.
 
@@ -374,6 +376,9 @@ class BM_Adam(Optimizer):
         value -= alpha * self.m[name] / (tensor.sqrt(self.v[name]) +
                                          self.epsilon)
         return value
+
+######################################################################
+
 
 class Regularizer(object):
     '''Base Python regularizer for parameter gradients.'''

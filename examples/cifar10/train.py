@@ -26,7 +26,11 @@ import argparse
 
 # sys.path.append(os.path.join(os.path.dirname(__file__), '../../build/python'))
 from singa import utils
+
+# TODO： Modified by Jedshady
+# import Self-Implemented optimizer
 from singa import myoptimizer
+
 from singa import device
 from singa import tensor
 from singa.proto import core_pb2
@@ -125,6 +129,8 @@ def train(data, net, max_epoch, get_lr, weight_decay, batch_size=100,
 
     net.to_device(dev)
 
+    #############################################################
+    # TODO: Modified by Jedshady
     # 1. Vanila SGD
     #opt = myoptimizer.SGD_ORI()
 
@@ -142,6 +148,7 @@ def train(data, net, max_epoch, get_lr, weight_decay, batch_size=100,
 
     #for (p, specs) in zip(net.param_names(), net.param_specs()):
     #    opt.register(p, specs)
+    ##############################################################
 
     tx = tensor.Tensor((batch_size, 3, 32, 32), dev)
     ty = tensor.Tensor((batch_size,), dev, core_pb2.kInt)
