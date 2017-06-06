@@ -26,7 +26,7 @@ import argparse
 
 # sys.path.append(os.path.join(os.path.dirname(__file__), '../../build/python'))
 from singa import utils
-from singa import optimizer
+from singa import myoptimizer
 from singa import device
 from singa import tensor
 from singa.proto import core_pb2
@@ -124,9 +124,24 @@ def train(data, net, max_epoch, get_lr, weight_decay, batch_size=100,
         dev = device.create_cuda_gpu()
 
     net.to_device(dev)
-    opt = optimizer.SGD(momentum=0.9, weight_decay=weight_decay)
-    for (p, specs) in zip(net.param_names(), net.param_specs()):
-        opt.register(p, specs)
+
+    # 1. Vanila SGD
+    #opt = myoptimizer.SGD_ORI()
+
+    # 2. SGD with Momentum and Decay
+    #opt = myoptimizer.SGD_MD(momentum=0.9, weight_decay=weight_decay)
+
+    # 3. BM with Momentum and Decay
+    #opt = myoptimizer.BM_MD(momentum=0.9, weight_decay=weight_decay)
+
+    # 4. BM scaled with Momentum and Decay
+    #opt = myoptimizer.BM_Scale_MD(momentum=0.9, weight_decay=weight_decay)
+
+    # 5. BM_Adam
+    opt = myoptimizer.BM_Adam()
+
+    #for (p, specs) in zip(net.param_names(), net.param_specs()):
+    #    opt.register(p, specs)
 
     tx = tensor.Tensor((batch_size, 3, 32, 32), dev)
     ty = tensor.Tensor((batch_size,), dev, core_pb2.kInt)
@@ -147,6 +162,7 @@ def train(data, net, max_epoch, get_lr, weight_decay, batch_size=100,
             loss += l
             acc += a
             for (s, p, g) in zip(net.param_names(), net.param_values(), grads):
+                # print s, p.shape, g.shape
                 opt.apply_with_lr(epoch, get_lr(epoch), g, p, str(s), b)
             # update progress bar
             utils.update_progress(b * 1.0 / num_train_batch,
@@ -193,7 +209,7 @@ if __name__ == '__main__':
     elif args.model == 'alexnet':
         train_x, test_x = normalize_for_alexnet(train_x, test_x)
         net = alexnet.create_net(args.use_cpu)
-        train((train_x, train_y, test_x, test_y), net, 2, alexnet_lr, 0.004,
+        train((train_x, train_y, test_x, test_y), net, 10, alexnet_lr, 0.004,
               use_cpu=args.use_cpu)
     elif args.model == 'vgg':
         train_x, test_x = normalize_for_vgg(train_x, test_x)
