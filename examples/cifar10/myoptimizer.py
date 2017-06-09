@@ -315,9 +315,9 @@ class BM_Scale_MD(Optimizer):
         scale_grad_numpy = np.floor(tensor.to_numpy(scale_grad_tensor_precise))
         scale_grad = tensor.from_numpy(scale_grad_numpy)
 
-        tensor.eltwise_mult(sign_grad, self.randomscale[name], new_grad)
-        tensor.eltwise_mult(new_grad, tensor.pow(10,scale_grad), final_grad)
-        self.opt.Apply(epoch, lr, name, final_grad.singa_tensor, value.singa_tensor)
+        tensor.eltwise_mult(sign_grad, self.randomscale[name], grad)
+        tensor.eltwise_mult(grad, tensor.pow(10,scale_grad), grad)
+        self.opt.Apply(epoch, lr, name, grad.singa_tensor, value.singa_tensor)
 
         return value
 
