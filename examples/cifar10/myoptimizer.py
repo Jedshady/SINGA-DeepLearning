@@ -347,9 +347,9 @@ class BM_Scale_MD(Optimizer):
         print "randomscale: "
         print randomscale_numpy
 
-        # scale_grad = tensor.from_numpy(scale_grad_numpy)
-        # scale_grad.to_device(dev)
-        #
+        scale_grad = tensor.from_numpy(scale_grad_numpy)
+        scale_grad.to_device(dev)
+        
         tensor.eltwise_mult(sign_grad, self.randomscale[name], grad)
         tensor.eltwise_mult(grad, tensor.exp(scale_grad), grad)
 
