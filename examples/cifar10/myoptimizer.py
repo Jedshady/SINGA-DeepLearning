@@ -31,7 +31,7 @@ Example usage::
   sgd.apply(1, g, p, 'param')  # use the global lr=0.1 for epoch 1
   sgd.apply_with_lr(2, 0.03, g, p, 'param')  # use lr=0.03 for epoch 2
 '''
-
+import numpy as np
 import math
 from . import singa_wrap as singa
 import tensor
@@ -308,11 +308,16 @@ class BM_Scale_MD(Optimizer):
         # 4. BM Scaled by a random sampling with momentum
         if name not in self.randomscale:
             self.randomscale[name] = tensor.Tensor(grad.shape, grad.device, grad.dtype)
-            tensor.uniform(0, 0.01, self.randomscale[name])
+            tensor.uniform(0, 1, self.randomscale[name])
 
-        grad = tensor.sign(grad)
-        tensor.eltwise_mult(grad, self.randomscale[name], grad)
-        self.opt.Apply(epoch, lr, name, grad.singa_tensor, value.singa_tensor)
+        sign_grad = tensor.sign(grad)
+        scale_grad_tensor_precise = tensor.log(tensor.abs(grad))
+        scale_grad_numpy = np.floor(tensor.to_numpy(scale_grad_tensor_precise))
+        scale_grad = tensor.from_numpy(scale_grad_numpy)
+
+        tensor.eltwise_mult(sign_grad, self.randomscale[name], new_grad)
+        tensor.eltwise_mult(new_grad, tensor.pow(10,scale_grad), final_grad)
+        self.opt.Apply(epoch, lr, name, final_grad.singa_tensor, value.singa_tensor)
 
         return value
 
