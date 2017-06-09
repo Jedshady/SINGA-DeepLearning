@@ -330,25 +330,25 @@ class BM_Scale_MD(Optimizer):
         final_grad = tensor.Tensor(grad.shape, grad.device, grad.dtype)
 
         # For debug `grad` and `scale_grad_tensor_precise`
-        tensor.to_host(grad)
-        tensor.to_host(scale_grad_tensor_precise)
-        grad_numpy = tensor.to_numpy(grad)
-        precise_numpy = tensor.to_numpy(scale_grad_tensor_precise)
-        print "name: " + name
-        print "Grad: "
-        print grad_numpy
-        print "Precise: "
-        print precise_numpy
-
+        # tensor.to_host(grad)
         # tensor.to_host(scale_grad_tensor_precise)
-        scale_grad_numpy = np.rint(tensor.to_numpy(scale_grad_tensor_precise))
-        print "After round to floor: "
-        print scale_grad_numpy
+        # grad_numpy = tensor.to_numpy(grad)
+        # precise_numpy = tensor.to_numpy(scale_grad_tensor_precise)
+        # print "name: " + name
+        # print "Grad: "
+        # print grad_numpy
+        # print "Precise: "
+        # print precise_numpy
 
-        tensor.to_host(self.randomscale[name])
-        randomscale_numpy = tensor.to_numpy(self.randomscale[name])
-        print "randomscale: "
-        print randomscale_numpy
+        tensor.to_host(scale_grad_tensor_precise)
+        scale_grad_numpy = np.rint(tensor.to_numpy(scale_grad_tensor_precise))
+        # print "After round to floor: "
+        # print scale_grad_numpy
+
+        # tensor.to_host(self.randomscale[name])
+        # randomscale_numpy = tensor.to_numpy(self.randomscale[name])
+        # print "randomscale: "
+        # print randomscale_numpy
 
         scale_grad = tensor.from_numpy(scale_grad_numpy)
         scale_grad.to_device(dev)
@@ -356,10 +356,10 @@ class BM_Scale_MD(Optimizer):
         tensor.eltwise_mult(sign_grad, self.randomscale[name], new_grad)
         tensor.eltwise_mult(new_grad, tensor.exp(scale_grad), final_grad)
 
-        tensor.to_host(final_grad)
-        new_grad_numpy = tensor.to_numpy(final_grad)
-        print "Final Grad: "
-        print new_grad_numpy
+        # tensor.to_host(final_grad)
+        # new_grad_numpy = tensor.to_numpy(final_grad)
+        # print "Final Grad: "
+        # print new_grad_numpy
 
         self.opt.Apply(epoch, lr, name, final_grad.singa_tensor, value.singa_tensor)
 
