@@ -312,18 +312,25 @@ class BM_Scale_MD(Optimizer):
         # 4. BM Scaled by a random sampling with momentum
         if name not in self.randomscale:
             self.randomscale[name] = tensor.Tensor(grad.shape, grad.device, grad.dtype)
-            tensor.uniform(1, 1, self.randomscale[name])
+            tensor.uniform(0, 1, self.randomscale[name])
 
         sign_grad = tensor.sign(grad)
-        scale_grad_tensor_precise = tensor.log(tensor.abs(grad))
 
-        tensor.to_host(scale_grad_tensor_precise)
-        scale_grad_numpy = np.floor(tensor.to_numpy(scale_grad_tensor_precise))
-        scale_grad = tensor.from_numpy(scale_grad_numpy)
-        scale_grad.to_device(dev)
+        tensor.to_host(sign_grad)
+        sign_grad_numpy = tensor.to_numpy(sign_grad)
+        print "name: " + name
+        print "Weight: "
+        print sign_grad_numpy
 
-        tensor.eltwise_mult(sign_grad, self.randomscale[name], grad)
-        tensor.eltwise_mult(grad, tensor.exp(scale_grad), grad)
+        # scale_grad_tensor_precise = tensor.log(tensor.abs(grad))
+        #
+        # tensor.to_host(scale_grad_tensor_precise)
+        # scale_grad_numpy = np.floor(tensor.to_numpy(scale_grad_tensor_precise))
+        # scale_grad = tensor.from_numpy(scale_grad_numpy)
+        # scale_grad.to_device(dev)
+        #
+        # tensor.eltwise_mult(sign_grad, self.randomscale[name], grad)
+        # tensor.eltwise_mult(grad, tensor.exp(scale_grad), grad)
         self.opt.Apply(epoch, lr, name, grad.singa_tensor, value.singa_tensor)
 
         return value
