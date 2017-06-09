@@ -336,9 +336,13 @@ class BM_Scale_MD(Optimizer):
         print grad_numpy
         print "Precise: "
         print precise_numpy
-        #
+
         # tensor.to_host(scale_grad_tensor_precise)
-        # scale_grad_numpy = np.floor(tensor.to_numpy(scale_grad_tensor_precise))
+        scale_grad_numpy = np.floor(tensor.to_numpy(scale_grad_tensor_precise))
+        print "After round to floor: "
+        print scale_grad_numpy
+
+
         # scale_grad = tensor.from_numpy(scale_grad_numpy)
         # scale_grad.to_device(dev)
         #
