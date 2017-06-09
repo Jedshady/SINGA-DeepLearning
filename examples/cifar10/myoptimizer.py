@@ -342,8 +342,8 @@ class BM_Scale_MD(Optimizer):
         print "After round to floor: "
         print scale_grad_numpy
 
-        tensor.to_host(randomscale[name])
-        randomscale_numpy = tensor.to_numpy(randomscale[name])
+        tensor.to_host(self.randomscale[name])
+        randomscale_numpy = tensor.to_numpy(self.randomscale[name])
         print "randomscale: "
         print randomscale_numpy
 
