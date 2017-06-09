@@ -328,12 +328,13 @@ class BM_Scale_MD(Optimizer):
         # print "name: " + name
         # print "Weight: "
         # print sign_grad_numpy
+        ##################################################
 
         # Get exponential of gradient of base `e`
         scale_grad_tensor_precise = tensor.log(tensor.abs(grad))
 
-
-        # For debug `grad` and `scale_grad_tensor_precise`
+        ##################################################
+        # TODO: For debug `grad` and `scale_grad_tensor_precise`
         # tensor.to_host(grad)
         # tensor.to_host(scale_grad_tensor_precise)
         # grad_numpy = tensor.to_numpy(grad)
@@ -343,9 +344,14 @@ class BM_Scale_MD(Optimizer):
         # print grad_numpy
         # print "Precise: "
         # print precise_numpy
+        ###################################################
 
+        # Have to move data to CPU in order to convert to numpy array
         tensor.to_host(scale_grad_tensor_precise)
         scale_grad_numpy = np.rint(tensor.to_numpy(scale_grad_tensor_precise))
+
+        ###################################################
+        # TODO: For debug `scale_grad_numpy` either `np.floor` or `np.ceil` or `np.rint`
         # scale_grad_numpy = tensor.to_numpy(scale_grad_tensor_precise)
         # print "After round to floor: "
         # print scale_grad_numpy
@@ -354,10 +360,13 @@ class BM_Scale_MD(Optimizer):
         # randomscale_numpy = tensor.to_numpy(self.randomscale[name])
         # print "randomscale: "
         # print randomscale_numpy
+        ####################################################
 
+        # Move data back from CPU to GPU
         scale_grad = tensor.from_numpy(scale_grad_numpy)
         scale_grad.to_device(grad.device)
 
+        # final_grad = sign * randomscale * e^scale_grad
         tensor.eltwise_mult(sign_grad, self.randomscale[name], mid_grad)
         tensor.eltwise_mult(mid_grad, tensor.exp(scale_grad), final_grad)
 
