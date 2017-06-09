@@ -85,6 +85,9 @@ def normalize_for_alexnet(train_x, test_x):
     mean = np.average(train_x, axis=0)
     train_x -= mean
     test_x -= mean
+
+    train_x /= 255
+    test_x /= 255
     return train_x, test_x
 
 
@@ -141,10 +144,10 @@ def train(data, net, max_epoch, get_lr, weight_decay, batch_size=100,
     #opt = myoptimizer.BM_MD(momentum=0.9, weight_decay=weight_decay)
 
     # 4. BM scaled with Momentum and Decay
-    #opt = myoptimizer.BM_Scale_MD(momentum=0.9, weight_decay=weight_decay)
+    opt = myoptimizer.BM_Scale_MD(momentum=0.9, weight_decay=weight_decay)
 
     # 5. BM_Adam
-    opt = myoptimizer.BM_Adam()
+    # opt = myoptimizer.BM_Adam()
 
     #for (p, specs) in zip(net.param_names(), net.param_specs()):
     #    opt.register(p, specs)

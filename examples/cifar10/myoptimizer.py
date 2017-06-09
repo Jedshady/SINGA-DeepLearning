@@ -308,7 +308,7 @@ class BM_Scale_MD(Optimizer):
         # 4. BM Scaled by a random sampling with momentum
         if name not in self.randomscale:
             self.randomscale[name] = tensor.Tensor(grad.shape, grad.device, grad.dtype)
-            tenser.uniform(0, 1, self.randomscale[name])
+            tenser.uniform(0, 0.001, self.randomscale[name])
 
         grad = tensor.sign(grad)
         tensor.eltwise_mult(grad, self.randomscale[name], grad)
