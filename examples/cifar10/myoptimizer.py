@@ -316,7 +316,7 @@ class BM_Scale_MD(Optimizer):
 
         sign_grad = tensor.sign(grad)
         scale_grad_tensor_precise = tensor.log(tensor.abs(grad))
-        scale_grad_tensor_precise.tohost()
+        tensor.tohost(scale_grad_tensor_precise)
 
         scale_grad_numpy = np.floor(tensor.to_numpy(scale_grad_tensor_precise))
         scale_grad = tensor.from_numpy(scale_grad_numpy)
