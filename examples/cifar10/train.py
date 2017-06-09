@@ -138,13 +138,13 @@ def train(data, net, max_epoch, get_lr, weight_decay, batch_size=100,
     #opt = myoptimizer.SGD_ORI()
 
     # 2. SGD with Momentum and Decay
-    opt = myoptimizer.SGD(momentum=0.9, weight_decay=weight_decay)
+    # opt = myoptimizer.SGD(momentum=0.9, weight_decay=weight_decay)
 
     # 3. BM with Momentum and Decay
     #opt = myoptimizer.BM_MD(momentum=0.9, weight_decay=weight_decay)
 
     # 4. BM scaled with Momentum and Decay
-    #opt = myoptimizer.BM_Scale_MD(momentum=0.9, weight_decay=weight_decay)
+    opt = myoptimizer.BM_Scale_MD(momentum=0.9, weight_decay=weight_decay)
 
     # 5. BM_Adam
     # opt = myoptimizer.BM_Adam()
@@ -219,7 +219,7 @@ if __name__ == '__main__':
     elif args.model == 'alexnet':
         train_x, test_x = normalize_for_alexnet(train_x, test_x)
         net = alexnet.create_net(args.use_cpu)
-        train((train_x, train_y, test_x, test_y), net, 10, alexnet_lr, 0.004,
+        train((train_x, train_y, test_x, test_y), net, 2, alexnet_lr, 0.004,
               use_cpu=args.use_cpu)
     elif args.model == 'vgg':
         train_x, test_x = normalize_for_vgg(train_x, test_x)
