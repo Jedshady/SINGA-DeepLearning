@@ -31,12 +31,16 @@ Example usage::
   sgd.apply(1, g, p, 'param')  # use the global lr=0.1 for epoch 1
   sgd.apply_with_lr(2, 0.03, g, p, 'param')  # use lr=0.03 for epoch 2
 '''
-import numpy as np
 import math
 from . import singa_wrap as singa
 import tensor
 from proto import model_pb2
 
+#########################
+#TODO: Self-import
+import numpy as np
+import singa as device
+##########################
 
 class Optimizer(object):
     '''The base python optimizer class.
@@ -297,7 +301,7 @@ class BM_Scale_MD(Optimizer):
         self.opt.Setup(conf.SerializeToString())
         self.randomscale = {}
 
-    def apply_with_lr(self, epoch, lr, grad, value, name, step=-1):
+    def apply_with_lr(self, epoch, lr, grad, value, name, step=-1, dev=None):
         if grad.is_empty():
             return value
         grad = self.apply_regularizer_constraint(epoch, value, grad, name, step)
@@ -312,8 +316,11 @@ class BM_Scale_MD(Optimizer):
 
         sign_grad = tensor.sign(grad)
         scale_grad_tensor_precise = tensor.log(tensor.abs(grad))
+        scale_grad_tensor_precise.tohost()
+
         scale_grad_numpy = np.floor(tensor.to_numpy(scale_grad_tensor_precise))
         scale_grad = tensor.from_numpy(scale_grad_numpy)
+        scale_grad.to_device(dev)
 
         tensor.eltwise_mult(sign_grad, self.randomscale[name], grad)
         tensor.eltwise_mult(grad, tensor.exp(scale_grad), grad)
