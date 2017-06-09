@@ -338,16 +338,26 @@ class BM_Scale_MD(Optimizer):
         print precise_numpy
 
         # tensor.to_host(scale_grad_tensor_precise)
-        scale_grad_numpy = np.floor(tensor.to_numpy(scale_grad_tensor_precise))
+        scale_grad_numpy = np.rint(tensor.to_numpy(scale_grad_tensor_precise))
         print "After round to floor: "
         print scale_grad_numpy
 
+        tensor.to_host(randomscale[name])
+        randomscale_numpy = tensor.to_numpy(randomscale[name])
+        print "randomscale: "
+        print randomscale_numpy
 
         # scale_grad = tensor.from_numpy(scale_grad_numpy)
         # scale_grad.to_device(dev)
         #
-        # tensor.eltwise_mult(sign_grad, self.randomscale[name], grad)
-        # tensor.eltwise_mult(grad, tensor.exp(scale_grad), grad)
+        tensor.eltwise_mult(sign_grad, self.randomscale[name], grad)
+        tensor.eltwise_mult(grad, tensor.exp(scale_grad), grad)
+
+        tensor.to_host(grad)
+        new_grad_numpy = tensor.to_numpy(grad)
+        print "New Grad: "
+        print new_grad_numpy
+
         self.opt.Apply(epoch, lr, name, grad.singa_tensor, value.singa_tensor)
 
         return value
