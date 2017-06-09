@@ -27,7 +27,7 @@ import argparse
 # sys.path.append(os.path.join(os.path.dirname(__file__), '../../build/python'))
 from singa import utils
 
-# TODO： Modified by Jedshady
+# TODO: Modified by Jedshady
 # import Self-Implemented optimizer
 from singa import myoptimizer
 
