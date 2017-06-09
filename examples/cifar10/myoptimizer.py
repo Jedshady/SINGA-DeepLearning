@@ -38,7 +38,7 @@ from proto import model_pb2
 
 #########################
 #TODO: Self-import
-# import numpy as np
+import numpy as np
 # import singa as device
 ##########################
 
