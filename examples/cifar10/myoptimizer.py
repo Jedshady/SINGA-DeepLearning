@@ -345,8 +345,8 @@ class BM_Scale_MD(Optimizer):
         # print precise_numpy
 
         tensor.to_host(scale_grad_tensor_precise)
-        # scale_grad_numpy = np.rint(tensor.to_numpy(scale_grad_tensor_precise))
-        scale_grad_numpy = tensor.to_numpy(scale_grad_tensor_precise)
+        scale_grad_numpy = np.rint(tensor.to_numpy(scale_grad_tensor_precise))
+        # scale_grad_numpy = tensor.to_numpy(scale_grad_tensor_precise)
         # print "After round to floor: "
         # print scale_grad_numpy
 
