@@ -86,8 +86,8 @@ def normalize_for_alexnet(train_x, test_x):
     train_x -= mean
     test_x -= mean
 
-    train_x /= 255
-    test_x /= 255
+    # train_x /= 255
+    # test_x /= 255
     return train_x, test_x
 
 
