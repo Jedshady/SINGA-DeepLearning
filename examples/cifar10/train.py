@@ -138,13 +138,13 @@ def train(data, net, max_epoch, get_lr, weight_decay, batch_size=100,
     #opt = myoptimizer.SGD_ORI()
 
     # 2. SGD with Momentum and Decay
-    #opt = myoptimizer.SGD_MD(momentum=0.9, weight_decay=weight_decay)
+    opt = myoptimizer.SGD(momentum=0.9, weight_decay=weight_decay)
 
     # 3. BM with Momentum and Decay
     #opt = myoptimizer.BM_MD(momentum=0.9, weight_decay=weight_decay)
 
     # 4. BM scaled with Momentum and Decay
-    opt = myoptimizer.BM_Scale_MD(momentum=0.9, weight_decay=weight_decay)
+    #opt = myoptimizer.BM_Scale_MD(momentum=0.9, weight_decay=weight_decay)
 
     # 5. BM_Adam
     # opt = myoptimizer.BM_Adam()

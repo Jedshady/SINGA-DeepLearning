@@ -38,7 +38,7 @@ from proto import model_pb2
 
 #########################
 #TODO: Self-import
-import numpy as np
+# import numpy as np
 # import singa as device
 ##########################
 
@@ -192,37 +192,37 @@ class Optimizer(object):
 
 ####################################################################
 # TODO: Following five classes has been modified by Jedshady
-class SGD_ORI(Optimizer):
-    '''The vallina Stochasitc Gradient Descent algorithm without momentum.
+# class SGD_ORI(Optimizer):
+#     '''The vallina Stochasitc Gradient Descent algorithm without momentum.
+#
+#     See the base Optimizer for all arguments.
+#     '''
+#
+#     def __init__(self, lr=None, momentum=None, weight_decay=None,
+#                  regularizer=None, constraint=None):
+#         super(SGD_ORI, self).__init__(lr, momentum, weight_decay, regularizer,
+#                                   constraint)
+#         # conf = model_pb2.OptimizerConf()
+#         # if self.momentum is not None:
+#         #     conf.momentum = self.momentum
+#         # conf.type = 'sgd'
+#         # self.opt = singa.CreateOptimizer('SGD')
+#         # self.opt.Setup(conf.SerializeToString())
+#
+#     def apply_with_lr(self, epoch, lr, grad, value, name, step=-1):
+#         if grad.is_empty():
+#             return value
+#         grad = self.apply_regularizer_constraint(epoch, value, grad, name, step)
+#         if name is not None and name in self.learning_rate_multiplier:
+#             lr = lr * self.learning_rate_multiplier[name]
+#
+#         # TODO: Self-implement
+#         # 1. SGD Updates
+#         value -= lr * grad
+#
+#         return value
 
-    See the base Optimizer for all arguments.
-    '''
-
-    def __init__(self, lr=None, momentum=None, weight_decay=None,
-                 regularizer=None, constraint=None):
-        super(SGD_ORI, self).__init__(lr, momentum, weight_decay, regularizer,
-                                  constraint)
-        # conf = model_pb2.OptimizerConf()
-        # if self.momentum is not None:
-        #     conf.momentum = self.momentum
-        # conf.type = 'sgd'
-        # self.opt = singa.CreateOptimizer('SGD')
-        # self.opt.Setup(conf.SerializeToString())
-
-    def apply_with_lr(self, epoch, lr, grad, value, name, step=-1):
-        if grad.is_empty():
-            return value
-        grad = self.apply_regularizer_constraint(epoch, value, grad, name, step)
-        if name is not None and name in self.learning_rate_multiplier:
-            lr = lr * self.learning_rate_multiplier[name]
-
-        # TODO: Self-implement
-        # 1. SGD Updates
-        value -= lr * grad
-
-        return value
-
-class SGD_MD(Optimizer):
+class SGD(Optimizer):
     '''The vallina Stochasitc Gradient Descent algorithm with momentum.
 
     See the base Optimizer for all arguments.
@@ -230,7 +230,7 @@ class SGD_MD(Optimizer):
 
     def __init__(self, lr=None, momentum=None, weight_decay=None,
                  regularizer=None, constraint=None):
-        super(SGD_MD, self).__init__(lr, momentum, weight_decay, regularizer,
+        super(SGD, self).__init__(lr, momentum, weight_decay, regularizer,
                                   constraint)
         conf = model_pb2.OptimizerConf()
         if self.momentum is not None:
