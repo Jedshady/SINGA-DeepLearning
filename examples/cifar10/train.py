@@ -149,8 +149,8 @@ def train(data, net, max_epoch, get_lr, weight_decay, batch_size=100,
     # 5. BM_Adam
     # opt = myoptimizer.BM_Adam()
 
-    #for (p, specs) in zip(net.param_names(), net.param_specs()):
-    #    opt.register(p, specs)
+    for (p, specs) in zip(net.param_names(), net.param_specs()):
+       opt.register(p, specs)
     ##############################################################
 
     tx = tensor.Tensor((batch_size, 3, 32, 32), dev)
