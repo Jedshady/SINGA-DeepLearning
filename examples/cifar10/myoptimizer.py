@@ -335,8 +335,8 @@ class BM_Scale_MD(Optimizer):
         grad_numpy = tensor.to_numpy(grad)
         # precise_numpy = tensor.to_numpy(scale_grad_tensor_precise)
         # print "name: " + name
-        print "Grad: "
-        print grad_numpy
+        # print "Grad: "
+        # print grad_numpy
         # print "Precise: "
         # print precise_numpy
 
@@ -359,8 +359,8 @@ class BM_Scale_MD(Optimizer):
 
         tensor.to_host(final_grad)
         new_grad_numpy = tensor.to_numpy(final_grad)
-        print "Final Grad: "
-        print new_grad_numpy
+        # print "Final Grad: "
+        # print new_grad_numpy
 
         self.opt.Apply(epoch, lr, name, final_grad.singa_tensor, value.singa_tensor)
 
