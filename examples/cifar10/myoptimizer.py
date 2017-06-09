@@ -316,13 +316,26 @@ class BM_Scale_MD(Optimizer):
 
         sign_grad = tensor.sign(grad)
 
-        tensor.to_host(sign_grad)
-        sign_grad_numpy = tensor.to_numpy(sign_grad)
-        print "name: " + name
-        print "Weight: "
-        print sign_grad_numpy
+        # For debug `sign_grad`
+        # tensor.to_host(sign_grad)
+        # sign_grad_numpy = tensor.to_numpy(sign_grad)
+        # print "name: " + name
+        # print "Weight: "
+        # print sign_grad_numpy
 
-        # scale_grad_tensor_precise = tensor.log(tensor.abs(grad))
+
+        scale_grad_tensor_precise = tensor.log(tensor.abs(grad))
+
+        # For debug `grad` and `scale_grad_tensor_precise`
+        tensor.to_host(grad)
+        tensor.to_host(scale_grad_tensor_precise)
+        grad_numpy = tensor.to_numpy(grad)
+        precise_numpy = tensor.to_numpy(scale_grad_tensor_precise)
+        print "name: " + name
+        print "Grad: "
+        print grad_numpy
+        print "Precise: "
+        print precise_numpy
         #
         # tensor.to_host(scale_grad_tensor_precise)
         # scale_grad_numpy = np.floor(tensor.to_numpy(scale_grad_tensor_precise))
