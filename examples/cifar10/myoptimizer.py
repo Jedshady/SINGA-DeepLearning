@@ -326,6 +326,9 @@ class BM_Scale_MD(Optimizer):
 
         scale_grad_tensor_precise = tensor.log(tensor.abs(grad))
 
+        new_grad = tensor.Tensor(grad.shape, grad.device, grad.dtype)
+        final_grad = tensor.Tensor(grad.shape, grad.device, grad.dtype)
+
         # For debug `grad` and `scale_grad_tensor_precise`
         tensor.to_host(grad)
         tensor.to_host(scale_grad_tensor_precise)
@@ -350,15 +353,15 @@ class BM_Scale_MD(Optimizer):
         scale_grad = tensor.from_numpy(scale_grad_numpy)
         scale_grad.to_device(dev)
 
-        tensor.eltwise_mult(sign_grad, self.randomscale[name], grad)
-        tensor.eltwise_mult(grad, tensor.exp(scale_grad), grad)
+        tensor.eltwise_mult(sign_grad, self.randomscale[name], new_grad)
+        tensor.eltwise_mult(new_grad, tensor.exp(scale_grad), final_grad)
 
-        tensor.to_host(grad)
-        new_grad_numpy = tensor.to_numpy(grad)
-        print "New Grad: "
+        tensor.to_host(final_grad)
+        new_grad_numpy = tensor.to_numpy(final_grad)
+        print "Final Grad: "
         print new_grad_numpy
 
-        self.opt.Apply(epoch, lr, name, grad.singa_tensor, value.singa_tensor)
+        self.opt.Apply(epoch, lr, name, final_grad.singa_tensor, value.singa_tensor)
 
         return value
 
