@@ -358,8 +358,8 @@ class BM_Scale_MD(Optimizer):
         scale_grad = tensor.from_numpy(scale_grad_numpy)
         scale_grad.to_device(grad.device)
 
-        tensor.eltwise_mult(sign_grad, self.randomscale[name], new_grad)
-        tensor.eltwise_mult(new_grad, tensor.exp(scale_grad), final_grad)
+        tensor.eltwise_mult(sign_grad, self.randomscale[name], mid_grad)
+        tensor.eltwise_mult(mid_grad, tensor.exp(scale_grad), final_grad)
 
         # tensor.to_host(final_grad)
         # new_grad_numpy = tensor.to_numpy(final_grad)
